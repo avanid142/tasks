@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #4a6cf7;
+      color: white;
+      margin-left: 5px;
+    }
+
+    button:hover {
+      background: #2f4ed8;
+    }
+
+    ol {
+      margin-top: 20px;
+      padding-left: 0;
+    }
+
+    li {
+      list-style: none;
+      background: #f4f6ff;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .done {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .logout {
+      margin-top: 20px;
+      background: crimson;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Your Tasks</h2>
+
+  <input id="taskInput" type="text" placeholder="New task">
+  <button onclick="addTask()">Add</button>
+
+  <ol id="taskList"></ol>
+
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<script>
+async function loadTasks() {
+  const res = await fetch("/tasks", { credentials: "include" });
+  if (!res.ok) return window.location.href = "/";
+
+  const tasks = await res.json();
+  const list = document.getElementById("taskList");
+  list.innerHTML = "";
+
+  tasks.forEach((task, i) => {
+    list.innerHTML += `
+      <li>
+        <div class="task">
+          <input type="checkbox" ${task.done ? "checked" : ""}
+            onclick="toggle(${i})">
+          <span class="${task.done ? "done" : ""}">
+            ${task.text}
+          </span>
+        </div>
+        <button onclick="del(${i})">✖</button>
+      </li>
+    `;
+  });
+}
+
+async function addTask() {
+  const task = document.getElementById("taskInput").value;
+  if (!task) return;
+
+  await fetch("/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ task })
+  });
+
+  document.getElementById("taskInput").value = "";
+  loadTasks();
+}
+
+async function toggle(i) {
+  await fetch(`/tasks/${i}`, {
+    method: "PUT",
+    credentials: "include"
+  });
+  loadTasks();
+}
+
+async function del(i) {
+  await fetch(`/tasks/${i}`, {
+    method: "DELETE",
+    credentials: "include"
+  });
+  loadTasks();
+}
+
+async function logout() {
+  await fetch("/logout", {
+    method: "POST",
+    credentials: "include"
+  });
+  window.location.href = "/";
+}
+
+loadTasks();
+</script>
+
+</body>
+</html>
+
