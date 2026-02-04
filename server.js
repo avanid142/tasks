@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.nextTick.port||3000;
 
 // --------------------
 // Middleware
@@ -125,5 +125,5 @@ app.post("/logout", (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port${PORT}`);
 });
