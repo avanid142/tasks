@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 
 const app = express();
-const PORT = process.nextTick.port||3000;
+const PORT = process.nextTick.port || 3000;
 
 // --------------------
 // Middleware
@@ -24,7 +24,7 @@ const users = [
 // tasks structure:
 // {
 //   username: [
-//     { text: "Task name", done: false }
+//     { text: "Task name", done: false, due: "YYYY-MM-DD" | null }
 //   ]
 // }
 const tasks = {};
@@ -39,6 +39,12 @@ function auth(req, res, next) {
   try {
     const decoded = jwt.verify(token, "secret123");
     req.user = decoded.username;
+
+    // ensure user task list exists
+    if (!tasks[req.user]) {
+      tasks[req.user] = [];
+    }
+
     next();
   } catch {
     res.redirect("/");
@@ -74,7 +80,9 @@ app.post("/login", (req, res) => {
 
   res.cookie("token", token, { httpOnly: true });
 
-  if (!tasks[username]) tasks[username] = [];
+  if (!tasks[username]) {
+    tasks[username] = [];
+  }
 
   res.json({ success: true });
 });
@@ -93,16 +101,20 @@ app.get("/tasks", auth, (req, res) => {
   res.json(tasks[req.user]);
 });
 
-// Add Task
+// Add Task (FIXED)
 app.post("/tasks", auth, (req, res) => {
+  const incoming = req.body.task;
+
   tasks[req.user].push({
-    text: req.body.task,
-    done: false
+    text: incoming.text,
+    done: false,
+    due: incoming.due || null
   });
+
   res.sendStatus(200);
 });
 
-// Toggle Task Complete (Checkbox)
+// Toggle Task Complete
 app.put("/tasks/:id", auth, (req, res) => {
   const task = tasks[req.user][req.params.id];
   if (task) {
@@ -123,7 +135,10 @@ app.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
-
+// --------------------
+// Server Start (UNCHANGED)
+// --------------------
 app.listen(PORT, () => {
   console.log(`Server running on port${PORT}`);
 });
+
