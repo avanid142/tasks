@@ -102,17 +102,21 @@ app.get("/tasks", auth, (req, res) => {
 });
 
 // Add Task (FIXED)
+// Add Task (FIXED FOR DUE DATE)
 app.post("/tasks", auth, (req, res) => {
-  const incoming = req.body.task;
+  const { text, done, due } = req.body.task;
+
+  if (!tasks[req.user]) tasks[req.user] = [];
 
   tasks[req.user].push({
-    text: incoming.text,
-    done: false,
-    due: incoming.due || null
+    text: text || "",
+    done: done || false,
+    due: due || null
   });
 
   res.sendStatus(200);
 });
+
 
 // Toggle Task Complete
 app.put("/tasks/:id", auth, (req, res) => {

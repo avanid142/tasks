@@ -2,182 +2,181 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Dashboard | TaskFlow</title>
+<title>TaskFlow Ultimate</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
-:root {
-  --primary: #4f46e5;
-  --secondary: #6366f1;
-  --bg: #f4f6fb;
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --text: #1f2937;
-  --muted: #6b7280;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --radius: 16px;
+:root{
+  --primary:#6366f1;
+  --bg1:#0f172a;
+  --bg2:#1e293b;
+  --card:#1e293b;
 }
 
-* { box-sizing: border-box; font-family: "Inter", sans-serif; }
+*{box-sizing:border-box;font-family:'Inter',sans-serif}
 
-body {
-  margin: 0;
-  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+body{
+  margin:0;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
 }
 
-/* ---------- NAVBAR ---------- */
-.navbar {
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  padding: 18px 40px;
-  display: flex;
-  justify-content: space-between;
-  color: white;
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  height:100vh;
+  background:#0f172a;
+  padding:30px 20px;
+  position:fixed;
 }
 
-.navbar button {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: white;
-  cursor: pointer;
+.sidebar h2{
+  margin-bottom:40px;
 }
 
-/* ---------- CONTAINER ---------- */
-.container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 20px;
+.sidebar button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:var(--primary);
+  color:white;
+  cursor:pointer;
 }
 
-/* ---------- STATS ---------- */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
+/* MAIN */
+.main{
+  margin-left:220px;
+  padding:30px;
 }
 
-.card {
-  background: var(--card-bg);
-  padding: 26px;
-  border-radius: var(--radius);
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+/* TOP STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-bottom:25px;
 }
 
-.card p {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--primary);
+.card{
+  background:var(--card);
+  padding:18px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+  transition:0.3s;
 }
 
-/* ---------- ADD TASK ---------- */
-.add-task {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
-  margin-bottom: 25px;
+.card:hover{
+  transform:translateY(-5px);
 }
 
-.add-task input, .add-task button {
-  padding: 14px;
-  border-radius: 999px;
-  border: 1px solid #ddd;
+.card h3{
+  margin:0;
+  font-size:14px;
+  opacity:0.7;
 }
 
-.add-task button {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-  border: none;
-  cursor: pointer;
+.card p{
+  font-size:22px;
+  font-weight:bold;
+  margin:8px 0 0;
 }
 
-/* ---------- MAIN GRID ---------- */
-.main-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 25px;
+/* ADD TASK */
+.add-task{
+  display:flex;
+  gap:10px;
+  margin-bottom:25px;
 }
 
-/* ---------- TASK LIST ---------- */
-.tasks {
-  background: var(--card-bg);
-  padding: 22px;
-  border-radius: var(--radius);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+.add-task input{
+  flex:1;
+  padding:12px;
+  border-radius:30px;
+  border:none;
 }
 
-.task {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid #eee;
+.add-task button{
+  padding:12px 18px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  color:white;
+  cursor:pointer;
 }
 
-.task:last-child { border-bottom: none; }
-
-.task span.completed {
-  text-decoration: line-through;
-  color: var(--muted);
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:25px;
 }
 
-.badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
+/* TASK LIST */
+.tasks{
+  background:var(--card);
+  padding:20px;
+  border-radius:16px;
 }
 
-.badge.overdue {
-  background: #fee2e2;
-  color: var(--danger);
+.task{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:12px;
+  background:rgba(255,255,255,0.05);
+  animation:fadeIn 0.4s ease;
+  transition:0.3s;
 }
 
-.badge.today {
-  background: #fef3c7;
-  color: var(--warning);
+.task:hover{
+  transform:translateY(-3px);
 }
 
-/* ---------- CALENDAR ---------- */
-.calendar {
-  background: var(--card-bg);
-  padding: 22px;
-  border-radius: var(--radius);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+.completed{
+  text-decoration:line-through;
+  opacity:0.6;
 }
 
-.calendar h3 {
-  margin-top: 0;
+.delete{
+  cursor:pointer;
+  transition:0.2s;
 }
 
-.calendar ul {
-  list-style: none;
-  padding: 0;
+.delete:hover{
+  transform:scale(1.2);
+  color:#ef4444;
 }
 
-.calendar li {
-  padding: 8px 0;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
+/* PROGRESS */
+.progress{
+  background:var(--card);
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
 }
 
-footer {
-  text-align: center;
-  margin-top: 40px;
-  color: var(--muted);
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-  <h2>TaskFlow</h2>
+<div class="sidebar">
+  <h2>🚀 TaskFlow</h2>
   <button onclick="logout()">Logout</button>
 </div>
 
-<div class="container">
+<div class="main">
 
   <div class="stats">
     <div class="card"><h3>Total</h3><p id="total">0</p></div>
@@ -186,138 +185,184 @@ footer {
   </div>
 
   <div class="add-task">
-    <input id="taskInput" placeholder="Task name..." />
+    <input id="taskInput" placeholder="Add a task..." />
     <input type="date" id="dueInput" />
     <button onclick="addTask()">Add</button>
   </div>
 
-  <div class="main-grid">
-
+  <div class="grid">
     <div class="tasks" id="taskList"></div>
 
-    <div class="calendar">
-      <h3>📅 Upcoming</h3>
-      <ul id="calendarList"></ul>
+    <div class="progress">
+      <h3>Progress</h3>
+      <div style="position:relative;width:220px;margin:auto;">
+        <canvas id="progressChart"></canvas>
+        <div id="progressText"
+          style="position:absolute;top:50%;left:50%;
+          transform:translate(-50%,-50%);
+          font-size:24px;font-weight:bold;">
+          0%
+        </div>
+      </div>
     </div>
-
   </div>
 
-  <footer>© 2026 TaskFlow • ❤️</footer>
 </div>
 
 <script>
-let tasks = [];
+let tasks=[];
+let chart;
 
-function today() {
-  return new Date().toISOString().split("T")[0];
-}
+/* LOAD TASKS */
+async function loadTasks(){
+  const res=await fetch("/tasks",{credentials:"include"});
+  if(!res.ok) return location.href="/";
 
-// ----------------------
-// LOAD TASKS
-// ----------------------
-async function loadTasks() {
-  const res = await fetch("/tasks", { credentials: "include" });
-  const raw = await res.json();
+  const raw=await res.json();
 
-  tasks = raw.map(t => ({
-    text: t.text,
-    done: !!t.done,
-    due: t.due || null
-  }));
+  tasks=raw.map(t=>{
+    if(typeof t==="string"){
+      return {text:t,done:false,due:null};
+    }
+    return {
+      text:t.text,
+      done:t.done||false,
+      due:t.due||null
+    };
+  });
 
   render();
 }
 
-// ----------------------
-// RENDER
-// ----------------------
-function render() {
-  const list = document.getElementById("taskList");
-  const cal = document.getElementById("calendarList");
+/* RENDER */
+function render(){
+  const list=document.getElementById("taskList");
+  list.innerHTML="";
 
-  list.innerHTML = "";
-  cal.innerHTML = "";
-
-  tasks.forEach((t, i) => {
-    let badge = "";
-
-    if (t.due && !t.done) {
-      if (t.due < today()) badge = `<span class="badge overdue">Overdue</span>`;
-      else if (t.due === today()) badge = `<span class="badge today">Today</span>`;
-    }
-
-    list.innerHTML += `
+  tasks.forEach((t,i)=>{
+    list.innerHTML+=`
       <div class="task">
-        <label>
-          <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggle(${i})">
-          <span class="${t.done ? "completed" : ""}">${t.text}</span>
-        </label>
-        <div>${badge}</div>
+        <div>
+          <input type="checkbox" ${t.done?"checked":""} onchange="toggle(${i})">
+          <span class="${t.done?"completed":""}">
+            ${t.text}
+          </span>
+          ${t.due?`<small style="opacity:0.6;"> (${t.due})</small>`:""}
+        </div>
+        <span class="delete" onclick="deleteTask(${i})">✖</span>
       </div>
     `;
-
-    if (t.due) {
-      cal.innerHTML += `<li>📌 ${t.text} — ${t.due}</li>`;
-    }
   });
 
-  document.getElementById("total").innerText = tasks.length;
-  document.getElementById("completed").innerText =
-    tasks.filter(t => t.done).length;
-  document.getElementById("pending").innerText =
-    tasks.filter(t => !t.done).length;
+  updateStats();
+  updateChart();
 }
 
-// ----------------------
-// ADD TASK (SERVER STORES DUE DATE)
-// ----------------------
-async function addTask() {
-  const text = taskInput.value.trim();
-  const due = dueInput.value;
-  if (!text) return;
+/* STATS */
+function updateStats(){
+  const total=tasks.length;
+  const completed=tasks.filter(t=>t.done).length;
+  const pending=total-completed;
 
-  await fetch("/tasks", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      task: { text, due }
+  document.getElementById("total").innerText=total;
+  document.getElementById("completed").innerText=completed;
+  document.getElementById("pending").innerText=pending;
+
+  if(total>0 && total===completed){
+    confetti({particleCount:120,spread:80});
+  }
+}
+
+/* ADD TASK */
+async function addTask(){
+  const text=taskInput.value.trim();
+  const due=dueInput.value||null;
+  if(!text) return;
+
+  await fetch("/tasks",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials:"include",
+    body:JSON.stringify({
+      task:{text,done:false,due}
     })
   });
 
-  taskInput.value = "";
-  dueInput.value = "";
-
+  taskInput.value="";
+  dueInput.value="";
   loadTasks();
 }
 
-// ----------------------
-// TOGGLE
-// ----------------------
-async function toggle(i) {
-  await fetch(`/tasks/${i}`, {
-    method: "PUT",
-    credentials: "include"
+/* TOGGLE */
+async function toggle(i){
+  await fetch(`/tasks/${i}`,{
+    method:"PUT",
+    credentials:"include"
   });
   loadTasks();
 }
 
-// ----------------------
-// LOGOUT
-// ----------------------
-async function logout() {
-  await fetch("/logout", { method: "POST", credentials: "include" });
-  location.href = "/";
+/* DELETE */
+async function deleteTask(i){
+  await fetch(`/tasks/${i}`,{
+    method:"DELETE",
+    credentials:"include"
+  });
+  loadTasks();
+}
+
+/* CHART */
+function updateChart(){
+  const total=tasks.length;
+  const completed=tasks.filter(t=>t.done).length;
+  const percent= total? Math.round((completed/total)*100):0;
+
+  const ctx=document.getElementById("progressChart");
+
+  if(chart){
+    chart.data.datasets[0].data=[percent,100-percent];
+    chart.update();
+    document.getElementById("progressText").innerText=percent+"%";
+    return;
+  }
+
+  chart=new Chart(ctx,{
+    type:"doughnut",
+    data:{
+      datasets:[{
+        data:[0,100],
+        backgroundColor:["#6366f1","#0f172a"],
+        borderWidth:0
+      }]
+    },
+    options:{
+      cutout:"75%",
+      plugins:{legend:{display:false}},
+      animation:{duration:1000}
+    }
+  });
+
+  setTimeout(()=>{
+    chart.data.datasets[0].data=[percent,100-percent];
+    chart.update();
+    document.getElementById("progressText").innerText=percent+"%";
+  },200);
+}
+
+/* LOGOUT */
+async function logout(){
+  await fetch("/logout",{method:"POST",credentials:"include"});
+  location.href="/";
 }
 
 loadTasks();
 </script>
 
-
-
-
 </body>
 </html>
+
+
+
 
 
 
