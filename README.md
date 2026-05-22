@@ -182,22 +182,3 @@ This project can be deployed on:
 
 ---
 
-# 👨‍💻 Author
-
-Developed by **Avani D**
-
----
-
-# ⭐ Support
-
-If you like this project:
-
-⭐ Star the repository  
-🍴 Fork the project  
-🛠️ Contribute improvements
-
----
-
-# 📜 License
-
-This project is licensed under the MIT License.
