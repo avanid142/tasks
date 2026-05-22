@@ -92,7 +92,7 @@ Tasks/
 ## 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/avanid142/tasks.git
+git clone https://github.com/your username/tasks.git
 ```
 
 ---
