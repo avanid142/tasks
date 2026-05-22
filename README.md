@@ -74,7 +74,7 @@ When all tasks are completed:
 # 📂 Project Structure
 
 ```bash
-TaskFlow/
+Tasks/
 │
 ├── public/
 │   ├── login.html
